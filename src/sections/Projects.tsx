@@ -5,12 +5,13 @@ import { ProjectItem } from '../types';
 import { SectionHeading } from '../components/common/SectionHeading';
 import { Container } from '../components/layout/Container';
 import { Modal } from '../components/common/Modal';
+import { TechIcon } from '../components/icons/TechIcon';
 
 export const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
   return (
-    <section id="projects" className="py-20 bg-background relative">
+    <section id="projects" className="py-24 bg-background/80 relative backdrop-blur-sm">
       <Container>
         <SectionHeading
           badgeText="Verified Work & Engineering"
@@ -25,23 +26,23 @@ export const Projects: React.FC = () => {
             return (
               <div
                 key={project.id}
-                className="p-6 sm:p-8 rounded-2xl bg-surface-300 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between shadow-xl"
+                className="p-6 sm:p-8 rounded-2xl bg-surface-300/90 border border-slate-700/80 hover:border-slate-600 transition-all flex flex-col justify-between shadow-2xl backdrop-blur-md"
               >
                 <div className="space-y-4">
                   {/* Badge & Type */}
                   <div className="flex items-center justify-between gap-2">
                     <span
-                      className={`font-mono text-xs px-2.5 py-1 rounded-md border font-semibold ${
+                      className={`font-mono text-xs px-3 py-1 rounded-md border font-semibold ${
                         isAutomation
-                          ? 'bg-sky-500/10 text-sky-400 border-sky-500/20'
-                          : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20'
+                          ? 'bg-sky-500/10 text-sky-400 border-sky-500/30'
+                          : 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30'
                       }`}
                     >
                       {project.type}
                     </span>
 
                     {project.metrics && (
-                      <span className="font-mono text-xs text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      <span className="font-mono text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/30 font-semibold">
                         {project.metrics}
                       </span>
                     )}
@@ -57,20 +58,21 @@ export const Projects: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Tech stack */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
+                  {/* Tech stack with vector icons */}
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {project.technologies.map((t) => (
                       <span
                         key={t}
-                        className="font-mono text-xs px-2.5 py-1 rounded bg-surface-200 text-slate-300 border border-slate-800"
+                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-surface-200 text-slate-200 border border-slate-700/80 shadow-sm"
                       >
-                        {t}
+                        <TechIcon name={t} className="w-3.5 h-3.5" />
+                        <span>{t}</span>
                       </span>
                     ))}
                   </div>
 
-                  {/* Brief Problem Statement */}
-                  <div className="pt-2 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800/80">
+                  {/* Problem Statement */}
+                  <div className="pt-3 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-slate-800">
                     <span className="text-slate-400 font-semibold uppercase font-mono text-xs block mb-1">
                       Problem Context:
                     </span>
@@ -81,7 +83,7 @@ export const Projects: React.FC = () => {
                 {/* Card Action Button */}
                 <div className="pt-6 mt-6 border-t border-slate-800 flex items-center justify-between">
                   <span className="font-mono text-xs text-slate-400">
-                    {project.approach.length} Implementation Steps
+                    {project.approach.length} Architectural Steps
                   </span>
                   <button
                     onClick={() => setSelectedProject(project)}
@@ -108,8 +110,8 @@ export const Projects: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2 pb-3 border-b border-slate-800 font-mono text-xs">
                 <span className="text-brand-primary font-bold">{selectedProject.type}</span>
                 <span className="text-slate-600">•</span>
-                <span className="text-slate-400">
-                  {selectedProject.technologies.join(', ')}
+                <span className="text-slate-300">
+                  {selectedProject.technologies.join(' • ')}
                 </span>
               </div>
 
@@ -139,7 +141,7 @@ export const Projects: React.FC = () => {
               </div>
 
               {/* Result */}
-              <div className="space-y-1.5 p-4 rounded-lg bg-surface-100 border border-slate-800">
+              <div className="space-y-1.5 p-4 rounded-xl bg-surface-100 border border-slate-700/80">
                 <h4 className="font-mono text-xs text-emerald-400 uppercase tracking-wider font-semibold">
                   3. Verified Outcome
                 </h4>
