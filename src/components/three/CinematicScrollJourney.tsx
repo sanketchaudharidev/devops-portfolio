@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 interface SceneConfig {
@@ -64,45 +64,91 @@ export const CinematicScrollJourney: React.FC = () => {
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const targetTimes = useRef<number[]>([0, 0, 0, 0, 0]);
+  const currentTimes = useRef<number[]>([0, 0, 0, 0, 0]);
+  const isSeeking = useRef<boolean[]>([false, false, false, false, false]);
+  const rafId = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
 
+  // Pre-prime all videos on mount
   useEffect(() => {
-    let ticking = false;
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        video.muted = true;
+        video.playsInline = true;
+        video.load();
+      }
+    });
+  }, []);
 
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-          if (totalHeight > 0) {
-            const current = Math.min(1, Math.max(0, window.scrollY / totalHeight));
-            setScrollProgress(current);
+  // Continuous 60fps RAF Lerp Scrubbing Loop (lets-scroll engine standard)
+  const scrubLoop = useCallback(() => {
+    videoRefs.current.forEach((video, idx) => {
+      if (video && video.duration && !isNaN(video.duration) && video.readyState >= 2) {
+        const target = targetTimes.current[idx];
+        const cur = currentTimes.current[idx];
 
-            // Scrub any available video elements smoothly
-            videoRefs.current.forEach((video, idx) => {
-              if (video && video.duration && !isNaN(video.duration)) {
-                const scene = SCENES[idx];
-                if (current >= scene.startProgress && current <= scene.endProgress) {
-                  const sceneProgress =
-                    (current - scene.startProgress) / (scene.endProgress - scene.startProgress);
-                  const targetTime = sceneProgress * video.duration;
-                  // Fast smooth scrub
-                  if (Math.abs(video.currentTime - targetTime) > 0.04) {
-                    video.currentTime = targetTime;
-                  }
-                }
-              }
-            });
+        // Smoothly interpolate time towards target
+        const nextTime = cur + (target - cur) * 0.25;
+        currentTimes.current[idx] = nextTime;
+
+        // Apply to video if difference is noticeable and not already busy seeking
+        if (Math.abs(video.currentTime - nextTime) > 0.02 && !isSeeking.current[idx]) {
+          isSeeking.current[idx] = true;
+          try {
+            // Use fastSeek if available on browser
+            if ('fastSeek' in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === 'function') {
+              (video as unknown as { fastSeek: (t: number) => void }).fastSeek(nextTime);
+            } else {
+              video.currentTime = nextTime;
+            }
+          } catch {
+            video.currentTime = nextTime;
           }
-          ticking = false;
+        }
+      }
+    });
+
+    rafId.current = requestAnimationFrame(scrubLoop);
+  }, []);
+
+  useEffect(() => {
+    rafId.current = requestAnimationFrame(scrubLoop);
+    return () => {
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
+  }, [scrubLoop]);
+
+  // Scroll listener that updates target video times
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight > 0) {
+        const progress = Math.min(1, Math.max(0, window.scrollY / totalHeight));
+        setScrollProgress(progress);
+
+        // Map scroll to target video durations
+        SCENES.forEach((scene, idx) => {
+          const video = videoRefs.current[idx];
+          if (video && video.duration && !isNaN(video.duration)) {
+            if (progress >= scene.startProgress && progress <= scene.endProgress) {
+              const sceneProgress =
+                (progress - scene.startProgress) / (scene.endProgress - scene.startProgress);
+              targetTimes.current[idx] = Math.max(0, Math.min(video.duration, sceneProgress * video.duration));
+            } else if (progress < scene.startProgress) {
+              targetTimes.current[idx] = 0;
+            } else {
+              targetTimes.current[idx] = video.duration;
+            }
+          }
         });
-        ticking = true;
       }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
       if (reducedMotion) return;
-      const x = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-      const y = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
       setMouseOffset({ x, y });
     };
 
@@ -127,19 +173,19 @@ export const CinematicScrollJourney: React.FC = () => {
     if (scrollProgress >= startProgress && scrollProgress <= endProgress) {
       const distFromMid = Math.abs(scrollProgress - mid);
       opacity = 1 - Math.pow(distFromMid / halfWidth, 2);
-      opacity = Math.max(0, Math.min(1, opacity * 1.5));
+      opacity = Math.max(0, Math.min(1, opacity * 1.6));
     }
 
-    const scale = 1.05 + (scrollProgress - startProgress) * 0.08;
+    const scale = 1.04 + (scrollProgress - startProgress) * 0.06;
 
     return { opacity, scale };
   };
 
   // Parallax transform with 3D perspective tilt
-  const tiltX = reducedMotion ? 0 : -mouseOffset.y * 5;
-  const tiltY = reducedMotion ? 0 : mouseOffset.x * 5;
-  const panX = reducedMotion ? 0 : -mouseOffset.x * 12;
-  const panY = reducedMotion ? 0 : -mouseOffset.y * 12;
+  const tiltX = reducedMotion ? 0 : -mouseOffset.y * 4;
+  const tiltY = reducedMotion ? 0 : mouseOffset.x * 4;
+  const panX = reducedMotion ? 0 : -mouseOffset.x * 10;
+  const panY = reducedMotion ? 0 : -mouseOffset.y * 10;
 
   return (
     <div
@@ -170,25 +216,31 @@ export const CinematicScrollJourney: React.FC = () => {
                 zIndex: idx,
               }}
             >
-              {/* Optional Video element with Image fallback */}
+              {/* High-FPS Scrubbed Video Element */}
               <video
-                ref={(el) => { videoRefs.current[idx] = el; }}
+                ref={(el) => {
+                  videoRefs.current[idx] = el;
+                }}
                 src={scene.videoSrc}
                 poster={scene.imageSrc}
                 muted
                 playsInline
-                preload="metadata"
+                autoPlay={false}
+                preload="auto"
+                onSeeked={() => {
+                  isSeeking.current[idx] = false;
+                }}
                 className="w-full h-full object-cover object-center filter brightness-[0.7] contrast-[1.1] transition-transform duration-500"
                 style={{
                   transform: `scale(${scale})`,
                 }}
                 onError={(e) => {
-                  // If .mp4 does not exist yet, fallback gracefully to poster image
+                  // Fallback to poster image if error occurs
                   (e.currentTarget as HTMLVideoElement).style.display = 'none';
                 }}
               />
 
-              {/* Fallback Image Layer (Always visible if video is loading or absent) */}
+              {/* Poster Backup Layer */}
               <img
                 src={scene.imageSrc}
                 alt={scene.name}
@@ -205,17 +257,16 @@ export const CinematicScrollJourney: React.FC = () => {
           );
         })}
 
-        {/* Ambient Dark Overlay to Ensure High Contrast for Typography */}
+        {/* Ambient Dark Overlay for Typography Contrast */}
         <div className="absolute inset-0 bg-background/50 backdrop-blur-[2px]" />
       </div>
 
-      {/* Cybernetic Telemetry HUD Watermark in Bottom Left */}
-      <div className="absolute bottom-4 left-6 hidden lg:flex items-center gap-3 bg-surface-300/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/80 text-[11px] font-mono text-slate-400 z-10">
+      {/* Anime DevOps Story Chapter HUD in Bottom Left */}
+      <div className="absolute bottom-4 left-6 hidden lg:flex items-center gap-3 bg-surface-300/85 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-slate-700/80 text-[11px] font-mono text-slate-300 z-10 shadow-lg">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span>AWS Cloud Telemetry Stream</span>
-        <span className="text-slate-600">|</span>
-        <span className="text-sky-400">
-          Scene: {SCENES.find((s) => scrollProgress >= s.startProgress && scrollProgress <= s.endProgress)?.name || SCENES[0].name}
+        <span className="text-slate-400">DevOps Story Chapter:</span>
+        <span className="text-sky-400 font-semibold">
+          {SCENES.find((s) => scrollProgress >= s.startProgress && scrollProgress <= s.endProgress)?.name || SCENES[0].name}
         </span>
       </div>
     </div>
