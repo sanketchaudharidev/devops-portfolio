@@ -111,7 +111,7 @@ export const Skills: React.FC = () => {
         <div className="mt-16 p-6 sm:p-10 rounded-2xl bg-surface-300 border border-slate-700/90 shadow-2xl space-y-8 backdrop-blur-md">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
             <div>
-              <div className="flex items-center gap-2 font-mono text-xs text-amber-400 font-semibold uppercase tracking-wider">
+              <div className="flex items-center gap-2 font-mono text-xs text-sky-400 font-semibold uppercase tracking-wider">
                 <TechIcon name="aws" className="w-4 h-4" />
                 <span>Cloud Infrastructure Architecture</span>
               </div>
@@ -157,11 +157,11 @@ export const Skills: React.FC = () => {
             {/* Currently Studying AWS (4 Services) */}
             <div className="space-y-4 bg-surface-200/80 p-6 rounded-xl border border-slate-700/90">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-amber-400 font-mono text-xs font-bold uppercase">
+                <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs font-bold uppercase">
                   <BookOpen className="w-4 h-4" />
                   <span>Currently Studying / Conceptual</span>
                 </div>
-                <span className="font-mono text-[11px] text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                <span className="font-mono text-[11px] text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
                   Continuous Learning
                 </span>
               </div>
@@ -174,7 +174,7 @@ export const Skills: React.FC = () => {
                 {profileData.awsExperience.currentlyStudying.map((service) => (
                   <div
                     key={service}
-                    className="flex items-center gap-2 p-2.5 rounded-lg bg-surface-100 border border-slate-800 text-slate-200 font-mono text-xs hover:border-amber-500/40 transition-colors shadow-sm"
+                    className="flex items-center gap-2 p-2.5 rounded-lg bg-surface-100 border border-slate-800 text-slate-200 font-mono text-xs hover:border-indigo-500/40 transition-colors shadow-sm"
                   >
                     <AwsServiceIcon service={service} className="w-4 h-4 shrink-0" />
                     <span className="truncate">{service}</span>

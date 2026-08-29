@@ -14,15 +14,15 @@ interface CloudNode {
 
 const AWS_CLOUD_NODES: CloudNode[] = [
   // 1. Central AWS Cloud Backbone Core
-  { id: 'aws-core', label: 'AWS Cloud Core', type: 'core', position: [0, 0, 0], color: '#FF9900', size: 0.65 },
+  { id: 'aws-core', label: 'AWS Cloud Core', type: 'core', position: [0, 0, 0], color: '#38BDF8', size: 0.65 },
 
   // 2. Compute Tier (EC2 & Auto Scaling)
-  { id: 'ec2-cluster', label: 'EC2 Compute Cluster', type: 'compute', position: [-2.5, 1.6, 1.2], color: '#FF9900', size: 0.35 },
+  { id: 'ec2-cluster', label: 'EC2 Compute Cluster', type: 'compute', position: [-2.5, 1.6, 1.2], color: '#60A5FA', size: 0.35 },
   { id: 'k8s-nodes', label: 'EKS / Kubernetes Pods', type: 'compute', position: [-1.8, 2.6, -0.8], color: '#326CE5', size: 0.38 },
 
   // 3. Storage & Database Tier (S3 & RDS MySQL/Mongo)
-  { id: 's3-bucket', label: 'S3 Object Storage', type: 'storage', position: [2.6, 1.8, 0.8], color: '#569A31', size: 0.34 },
-  { id: 'rds-db', label: 'RDS MySQL / Mongo DB', type: 'database', position: [2.2, -1.2, 1.5], color: '#3B48CC', size: 0.36 },
+  { id: 's3-bucket', label: 'S3 Object Storage', type: 'storage', position: [2.6, 1.8, 0.8], color: '#10B981', size: 0.34 },
+  { id: 'rds-db', label: 'RDS MySQL / Mongo DB', type: 'database', position: [2.2, -1.2, 1.5], color: '#818CF8', size: 0.36 },
 
   // 4. Networking & Edge Tier (VPC, Route 53, CloudFront)
   { id: 'vpc-gateway', label: 'VPC Peering Gateway', type: 'network', position: [-3.2, -0.8, 0.4], color: '#A855F7', size: 0.32 },
@@ -31,11 +31,11 @@ const AWS_CLOUD_NODES: CloudNode[] = [
 
   // 5. CI/CD Ingestion Tier (Git, Jenkins, Terraform)
   { id: 'git-source', label: 'Git / GitLab Source', type: 'cicd', position: [-4.2, 2.2, -1.8], color: '#38BDF8', size: 0.30 },
-  { id: 'jenkins-ci', label: 'Jenkins CI/CD Pipeline', type: 'cicd', position: [-3.4, 0.8, -1.2], color: '#D24939', size: 0.34 },
+  { id: 'jenkins-ci', label: 'Jenkins CI/CD Pipeline', type: 'cicd', position: [-3.4, 0.8, -1.2], color: '#3B82F6', size: 0.34 },
   { id: 'terraform-iac', label: 'Terraform IaC State', type: 'cicd', position: [-1.5, -2.2, -1.0], color: '#7B42BC', size: 0.28 },
 
   // 6. Observability & Telemetry (CloudWatch)
-  { id: 'cloudwatch-telemetry', label: 'CloudWatch Telemetry', type: 'telemetry', position: [-0.2, -2.4, 1.2], color: '#E7157B', size: 0.35 },
+  { id: 'cloudwatch-telemetry', label: 'CloudWatch Telemetry', type: 'telemetry', position: [-0.2, -2.4, 1.2], color: '#06B6D4', size: 0.35 },
   { id: 'prod-gateway', label: 'Zero-Downtime Prod', type: 'core', position: [0.2, -3.2, -0.4], color: '#10B981', size: 0.42 },
 ];
 
@@ -239,7 +239,7 @@ export const AwsCloudHero3D: React.FC<{ reducedMotion?: boolean }> = ({ reducedM
     <group ref={groupRef}>
       {/* Lighting */}
       <ambientLight intensity={0.9} />
-      <pointLight position={[8, 8, 8]} intensity={2.0} color="#FF9900" />
+      <pointLight position={[8, 8, 8]} intensity={2.0} color="#38BDF8" />
       <pointLight position={[-8, -8, -6]} intensity={1.5} color="#38BDF8" />
       <pointLight position={[0, 0, 5]} intensity={1.2} color="#10B981" />
 
@@ -248,15 +248,15 @@ export const AwsCloudHero3D: React.FC<{ reducedMotion?: boolean }> = ({ reducedM
         {/* Core Icosahedron Wireframe Mesh */}
         <mesh ref={coreGlobeRef}>
           <icosahedronGeometry args={[1.2, 2]} />
-          <meshBasicMaterial color="#FF9900" wireframe transparent opacity={0.3} />
+          <meshBasicMaterial color="#38BDF8" wireframe transparent opacity={0.3} />
         </mesh>
 
         {/* Inner Glowing Core Sphere */}
         <mesh>
           <sphereGeometry args={[0.65, 24, 24]} />
           <meshStandardMaterial
-            color="#FF9900"
-            emissive="#FF9900"
+            color="#38BDF8"
+            emissive="#38BDF8"
             emissiveIntensity={1.0}
             roughness={0.1}
             metalness={0.9}
@@ -331,7 +331,7 @@ export const AwsCloudHero3D: React.FC<{ reducedMotion?: boolean }> = ({ reducedM
 
       {/* AMBIENT CYBER PARTICLES */}
       <points geometry={starField}>
-        <pointsMaterial size={0.04} color="#FF9900" transparent opacity={0.35} />
+        <pointsMaterial size={0.04} color="#38BDF8" transparent opacity={0.35} />
       </points>
     </group>
   );

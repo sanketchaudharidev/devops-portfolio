@@ -37,7 +37,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
                 AVAILABLE FOR DEVOPS ROLES
               </Badge>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-slate-700/80 bg-surface-200/90 text-slate-300 font-mono text-xs shadow-sm">
-                <Cloud className="w-3.5 h-3.5 text-amber-400" />
+                <Cloud className="w-3.5 h-3.5 text-sky-400" />
                 <span>AWS Cloud Infrastructure</span>
               </div>
               {onOpenTerminal && (
@@ -58,7 +58,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
                 {profileData.name}
               </h1>
               <div className="flex items-center gap-3">
-                <span className="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-sky-400 to-emerald-400">
+                <span className="text-2xl sm:text-3xl lg:text-4xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-300 to-emerald-400">
                   {profileData.subTitles[subTitleIndex]}
                 </span>
               </div>
@@ -68,7 +68,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <div className="flex items-center gap-2 py-1.5 px-3 rounded-lg bg-surface-200/90 border border-slate-700/80 font-mono text-xs text-slate-200 shadow-md backdrop-blur-md">
                 <TechIcon name="aws" className="w-4 h-4" />
-                <span className="font-semibold text-amber-400">AWS</span>
+                <span className="font-semibold text-sky-400">AWS</span>
               </div>
               <div className="flex items-center gap-2 py-1.5 px-3 rounded-lg bg-surface-200/90 border border-slate-700/80 font-mono text-xs text-slate-200 shadow-md backdrop-blur-md">
                 <TechIcon name="kubernetes" className="w-4 h-4" />
@@ -140,7 +140,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
                 <span>Dev / QA / UAT / Prod</span>
               </div>
               <div className="flex items-center gap-2 col-span-2 sm:col-span-1">
-                <Activity className="w-4 h-4 text-amber-400 shrink-0" />
+                <Activity className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span>Zero-Downtime Releases</span>
               </div>
             </div>
@@ -151,8 +151,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
           <div className="lg:col-span-4 space-y-4">
             <div className="p-6 rounded-2xl bg-surface-300/80 border border-slate-700/80 shadow-2xl backdrop-blur-xl space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-                <div className="flex items-center gap-2 font-mono text-xs text-amber-400 font-bold uppercase tracking-wider">
-                  <Cpu className="w-4 h-4 text-amber-400" />
+                <div className="flex items-center gap-2 font-mono text-xs text-sky-400 font-bold uppercase tracking-wider">
+                  <Cpu className="w-4 h-4 text-sky-400" />
                   <span>AWS 3D Cloud Topology</span>
                 </div>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />

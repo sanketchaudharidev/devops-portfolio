@@ -19,8 +19,8 @@ export default {
         brand: {
           primary: '#38bdf8', // sky-400
           accent: '#10b981',  // emerald-500
-          amber: '#f59e0b',   // amber-500
-          violet: '#818cf8',  // indigo-400
+          indigo: '#818cf8',  // indigo-400
+          violet: '#a855f7',  // purple-500
         },
       },
       fontFamily: {

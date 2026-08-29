@@ -4,7 +4,8 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 interface SceneConfig {
   id: string;
   name: string;
-  src: string;
+  imageSrc: string;
+  videoSrc: string;
   startProgress: number;
   endProgress: number;
   accent: string;
@@ -14,15 +15,17 @@ const SCENES: SceneConfig[] = [
   {
     id: 'hero-core',
     name: 'AWS Cloud Core & EC2 Fleet',
-    src: './scenes/scene-1-hero-aws-core.jpg',
+    imageSrc: './scenes/scene-1-hero-aws-core.jpg',
+    videoSrc: './scenes/scene-1-hero-aws-core.mp4',
     startProgress: 0.0,
     endProgress: 0.25,
-    accent: '#FF9900',
+    accent: '#38BDF8',
   },
   {
     id: 'pipeline-conduit',
     name: 'Automated CI/CD Pipeline & Quality Gate',
-    src: './scenes/scene-2-pipeline-conduit.jpg',
+    imageSrc: './scenes/scene-2-pipeline-conduit.jpg',
+    videoSrc: './scenes/scene-2-pipeline-conduit.mp4',
     startProgress: 0.2,
     endProgress: 0.5,
     accent: '#38BDF8',
@@ -30,7 +33,8 @@ const SCENES: SceneConfig[] = [
   {
     id: 'vpc-mesh',
     name: 'Multi-Region VPC Peering Network',
-    src: './scenes/scene-3-vpc-global-mesh.jpg',
+    imageSrc: './scenes/scene-3-vpc-global-mesh.jpg',
+    videoSrc: './scenes/scene-3-vpc-global-mesh.mp4',
     startProgress: 0.45,
     endProgress: 0.75,
     accent: '#A855F7',
@@ -38,15 +42,17 @@ const SCENES: SceneConfig[] = [
   {
     id: 'cloudwatch-hud',
     name: 'CloudWatch Telemetry & Mission Control',
-    src: './scenes/scene-4-cloudwatch-hud.jpg',
+    imageSrc: './scenes/scene-4-cloudwatch-hud.jpg',
+    videoSrc: './scenes/scene-4-cloudwatch-hud.mp4',
     startProgress: 0.7,
     endProgress: 0.9,
-    accent: '#E7157B',
+    accent: '#06B6D4',
   },
   {
     id: 'production-portal',
     name: 'Zero-Downtime Live Production Gateway',
-    src: './scenes/scene-5-production-portal.jpg',
+    imageSrc: './scenes/scene-5-production-portal.jpg',
+    videoSrc: './scenes/scene-5-production-portal.mp4',
     startProgress: 0.85,
     endProgress: 1.0,
     accent: '#10B981',
@@ -57,6 +63,7 @@ export const CinematicScrollJourney: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -69,6 +76,22 @@ export const CinematicScrollJourney: React.FC = () => {
           if (totalHeight > 0) {
             const current = Math.min(1, Math.max(0, window.scrollY / totalHeight));
             setScrollProgress(current);
+
+            // Scrub any available video elements smoothly
+            videoRefs.current.forEach((video, idx) => {
+              if (video && video.duration && !isNaN(video.duration)) {
+                const scene = SCENES[idx];
+                if (current >= scene.startProgress && current <= scene.endProgress) {
+                  const sceneProgress =
+                    (current - scene.startProgress) / (scene.endProgress - scene.startProgress);
+                  const targetTime = sceneProgress * video.duration;
+                  // Fast smooth scrub
+                  if (Math.abs(video.currentTime - targetTime) > 0.04) {
+                    video.currentTime = targetTime;
+                  }
+                }
+              }
+            });
           }
           ticking = false;
         });
@@ -103,22 +126,20 @@ export const CinematicScrollJourney: React.FC = () => {
     let opacity = 0;
     if (scrollProgress >= startProgress && scrollProgress <= endProgress) {
       const distFromMid = Math.abs(scrollProgress - mid);
-      // Bell curve opacity
       opacity = 1 - Math.pow(distFromMid / halfWidth, 2);
       opacity = Math.max(0, Math.min(1, opacity * 1.5));
     }
 
-    // Gentle camera zoom forward
     const scale = 1.05 + (scrollProgress - startProgress) * 0.08;
 
     return { opacity, scale };
   };
 
   // Parallax transform with 3D perspective tilt
-  const tiltX = reducedMotion ? 0 : -mouseOffset.y * 6;
-  const tiltY = reducedMotion ? 0 : mouseOffset.x * 6;
-  const panX = reducedMotion ? 0 : -mouseOffset.x * 15;
-  const panY = reducedMotion ? 0 : -mouseOffset.y * 15;
+  const tiltX = reducedMotion ? 0 : -mouseOffset.y * 5;
+  const tiltY = reducedMotion ? 0 : mouseOffset.x * 5;
+  const panX = reducedMotion ? 0 : -mouseOffset.x * 12;
+  const panY = reducedMotion ? 0 : -mouseOffset.y * 12;
 
   return (
     <div
@@ -149,14 +170,34 @@ export const CinematicScrollJourney: React.FC = () => {
                 zIndex: idx,
               }}
             >
-              <img
-                src={scene.src}
-                alt={scene.name}
+              {/* Optional Video element with Image fallback */}
+              <video
+                ref={(el) => { videoRefs.current[idx] = el; }}
+                src={scene.videoSrc}
+                poster={scene.imageSrc}
+                muted
+                playsInline
+                preload="metadata"
                 className="w-full h-full object-cover object-center filter brightness-[0.7] contrast-[1.1] transition-transform duration-500"
                 style={{
                   transform: `scale(${scale})`,
                 }}
+                onError={(e) => {
+                  // If .mp4 does not exist yet, fallback gracefully to poster image
+                  (e.currentTarget as HTMLVideoElement).style.display = 'none';
+                }}
               />
+
+              {/* Fallback Image Layer (Always visible if video is loading or absent) */}
+              <img
+                src={scene.imageSrc}
+                alt={scene.name}
+                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.7] contrast-[1.1] transition-transform duration-500 -z-10"
+                style={{
+                  transform: `scale(${scale})`,
+                }}
+              />
+
               {/* Cinematic Vignette & Ambient Radial Shading */}
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/70" />
               <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
@@ -173,7 +214,7 @@ export const CinematicScrollJourney: React.FC = () => {
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         <span>AWS Cloud Telemetry Stream</span>
         <span className="text-slate-600">|</span>
-        <span className="text-amber-400">
+        <span className="text-sky-400">
           Scene: {SCENES.find((s) => scrollProgress >= s.startProgress && scrollProgress <= s.endProgress)?.name || SCENES[0].name}
         </span>
       </div>
