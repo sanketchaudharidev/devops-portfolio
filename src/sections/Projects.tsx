@@ -11,7 +11,7 @@ export const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
   return (
-    <section id="projects" className="py-24 bg-background/80 relative backdrop-blur-sm">
+    <section id="projects" className="py-24 bg-slate-950/20 relative">
       <Container>
         <SectionHeading
           badgeText="Verified Work & Engineering"

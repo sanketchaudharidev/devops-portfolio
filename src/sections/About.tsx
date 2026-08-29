@@ -6,7 +6,7 @@ import { TechIcon } from '../components/icons/TechIcon';
 
 export const About: React.FC = () => {
   return (
-    <section id="about" className="py-24 border-t border-slate-800/80 bg-surface-400/40 relative backdrop-blur-sm">
+    <section id="about" className="py-24 border-t border-slate-800/60 bg-slate-950/20 relative">
       <Container>
         <SectionHeading
           badgeText="Profile Overview"

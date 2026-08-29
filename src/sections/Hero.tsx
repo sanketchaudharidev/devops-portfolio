@@ -21,9 +21,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
 
   return (
     <section className="relative min-h-[95vh] lg:min-h-screen pt-32 pb-20 lg:pt-40 lg:pb-28 flex items-center justify-center overflow-hidden">
-      {/* Soft Vignette & Radial Depth */}
-      <div className="absolute inset-0 bg-radial-glow opacity-80 pointer-events-none" />
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           

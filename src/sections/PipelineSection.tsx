@@ -19,7 +19,7 @@ export const PipelineSection: React.FC = () => {
   const [activeStage, setActiveStage] = useState<number>(0);
 
   return (
-    <section id="pipeline" className="py-24 bg-surface-400/50 relative backdrop-blur-sm">
+    <section id="pipeline" className="py-24 bg-slate-950/20 relative">
       <Container>
         <SectionHeading
           badgeText="Methodology & Architecture"

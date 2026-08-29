@@ -47,7 +47,7 @@ export const Skills: React.FC = () => {
       : profileData.skillCategories.filter((c) => c.title === selectedCategory);
 
   return (
-    <section id="skills" className="py-24 bg-background/80 relative backdrop-blur-sm">
+    <section id="skills" className="py-24 bg-slate-950/20 relative">
       <Container>
         <SectionHeading
           badgeText="Technical Ecosystem"

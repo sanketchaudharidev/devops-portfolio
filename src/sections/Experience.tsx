@@ -15,7 +15,7 @@ export const Experience: React.FC = () => {
   };
 
   return (
-    <section id="experience" className="py-24 bg-background/80 relative backdrop-blur-sm">
+    <section id="experience" className="py-24 bg-slate-950/20 relative">
       <Container>
         <SectionHeading
           badgeText="Work History"
