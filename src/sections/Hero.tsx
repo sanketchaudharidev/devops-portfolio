@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, FileDown, Layers, Terminal, Sparkles, ShieldCheck, Activity, Cpu, Cloud } from 'lucide-react';
+import { ArrowRight, FileDown, Layers, Terminal, Sparkles, ShieldCheck, Activity, Cloud, CheckCircle2, Play } from 'lucide-react';
 import { profileData } from '../data/profile';
 import { Button } from '../components/common/Button';
 import { Badge } from '../components/common/Badge';
 import { TechIcon } from '../components/icons/TechIcon';
-import { AwsServiceIcon } from '../components/icons/AwsIcons';
 
 interface HeroProps {
   onOpenTerminal?: () => void;
@@ -22,21 +21,21 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
 
   return (
     <section className="relative min-h-[95vh] lg:min-h-screen pt-32 pb-20 lg:pt-40 lg:pb-28 flex items-center justify-center overflow-hidden">
-      {/* Subtle Background Radial Depth */}
+      {/* Soft Vignette & Radial Depth */}
       <div className="absolute inset-0 bg-radial-glow opacity-80 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           
-          {/* Main Hero Column */}
-          <div className="lg:col-span-8 space-y-6">
+          {/* Main Hero Left Column */}
+          <div className="lg:col-span-7 space-y-6">
             
-            {/* Live Telemetry Status Bar */}
+            {/* Live Status Pill */}
             <div className="flex flex-wrap items-center gap-3">
               <Badge variant="emerald" pulse size="md">
                 AVAILABLE FOR DEVOPS ROLES
               </Badge>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-slate-700/80 bg-surface-200/90 text-slate-300 font-mono text-xs shadow-sm">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border border-slate-700/80 bg-surface-200/90 text-slate-300 font-mono text-xs shadow-sm backdrop-blur-md">
                 <Cloud className="w-3.5 h-3.5 text-sky-400" />
                 <span>AWS Cloud Infrastructure</span>
               </div>
@@ -54,7 +53,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
 
             {/* Name & Animated Dynamic Role Subtitle */}
             <div className="space-y-2">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-xl">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white uppercase drop-shadow-2xl">
                 {profileData.name}
               </h1>
               <div className="flex items-center gap-3">
@@ -93,7 +92,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
             </div>
 
             {/* Concise Value Proposition */}
-            <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl font-normal">
+            <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl font-normal drop-shadow">
               Building reliable deployment pipelines, multi-environment cloud infrastructure, and zero-downtime microservices across insurance, AdTech, and AI/SaaS platforms.
             </p>
 
@@ -147,44 +146,87 @@ export const Hero: React.FC<HeroProps> = ({ onOpenTerminal }) => {
 
           </div>
 
-          {/* Right Column: 3D AWS Cloud Architecture HUD Card */}
-          <div className="lg:col-span-4 space-y-4">
-            <div className="p-6 rounded-2xl bg-surface-300/80 border border-slate-700/80 shadow-2xl backdrop-blur-xl space-y-4">
+          {/* Right Column: DevOps Journey Chapter Guide HUD */}
+          <div className="lg:col-span-5 space-y-4">
+            <div className="p-6 rounded-2xl bg-surface-300/70 border border-slate-700/80 shadow-2xl backdrop-blur-xl space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                 <div className="flex items-center gap-2 font-mono text-xs text-sky-400 font-bold uppercase tracking-wider">
-                  <Cpu className="w-4 h-4 text-sky-400" />
-                  <span>AWS 3D Cloud Topology</span>
+                  <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+                  <span>DevOps Work Journey Story</span>
                 </div>
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                <span className="font-mono text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  Scroll To Play
+                </span>
               </div>
 
               <p className="text-xs text-slate-300 leading-relaxed font-mono">
-                Interact with the full-page 3D AWS environment in the background. Move your cursor to align parallax, and scroll to travel through infrastructure layers.
+                Scroll down through the page to experience the continuous cinematic journey from the cozy night desk to production deployment.
               </p>
 
-              {/* AWS Live Service Indicators */}
-              <div className="grid grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
-                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-surface-200/90 border border-slate-800 text-slate-200">
-                  <AwsServiceIcon service="ec2" className="w-3.5 h-3.5" />
-                  <span>EC2 Compute</span>
-                </div>
-                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-surface-200/90 border border-slate-800 text-slate-200">
-                  <AwsServiceIcon service="s3" className="w-3.5 h-3.5" />
-                  <span>S3 Buckets</span>
-                </div>
-                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-surface-200/90 border border-slate-800 text-slate-200">
-                  <AwsServiceIcon service="rds" className="w-3.5 h-3.5" />
-                  <span>RDS MySQL</span>
-                </div>
-                <div className="flex items-center gap-1.5 p-2 rounded-lg bg-surface-200/90 border border-slate-800 text-slate-200">
-                  <AwsServiceIcon service="cloudwatch" className="w-3.5 h-3.5" />
-                  <span>CloudWatch</span>
-                </div>
+              {/* 5 Story Chapters */}
+              <div className="space-y-2 pt-1 font-mono text-xs">
+                <a
+                  href="#hero"
+                  className="flex items-center justify-between p-2 rounded-lg bg-surface-200/80 border border-slate-700 hover:border-sky-400 text-slate-200 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-sky-400" />
+                    <span>1. Night Owl DevOps Desk</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400">Hero</span>
+                </a>
+
+                <a
+                  href="#pipeline"
+                  className="flex items-center justify-between p-2 rounded-lg bg-surface-200/80 border border-slate-700 hover:border-emerald-400 text-slate-200 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span>2. CI/CD Pipeline & Docker</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400">Pipeline</span>
+                </a>
+
+                <a
+                  href="#experience"
+                  className="flex items-center justify-between p-2 rounded-lg bg-surface-200/80 border border-slate-700 hover:border-indigo-400 text-slate-200 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-indigo-400" />
+                    <span>3. AWS Cloud Whiteboard</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400">Experience</span>
+                </a>
+
+                <a
+                  href="#skills"
+                  className="flex items-center justify-between p-2 rounded-lg bg-surface-200/80 border border-slate-700 hover:border-sky-400 text-slate-200 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-sky-400" />
+                    <span>4. CloudWatch Observability</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400">Skills</span>
+                </a>
+
+                <a
+                  href="#contact"
+                  className="flex items-center justify-between p-2 rounded-lg bg-surface-200/80 border border-slate-700 hover:border-emerald-400 text-slate-200 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span>5. Sunrise Zero-Downtime Release</span>
+                  </span>
+                  <span className="text-[10px] text-slate-400">Contact</span>
+                </a>
               </div>
 
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-slate-400">
-                <span>Multi-Region Mesh</span>
-                <span className="text-emerald-400">● 60 FPS WebGL</span>
+              <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  60 FPS Video Scrub
+                </span>
+                <span className="text-sky-400">Mouse Parallax 3D</span>
               </div>
             </div>
           </div>

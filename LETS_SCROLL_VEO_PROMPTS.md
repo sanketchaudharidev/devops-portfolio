@@ -65,7 +65,7 @@ Single continuous cinematic anime camera move, no cuts. Continue the gentle forw
 
 ### 🎥 SCENE 5: Dawn Release: 100% Zero-Downtime Deployment (Contact Section)
 * **Start Image in Veo:** [`scene-5-production-portal.jpg`](file:///d:/Ai%20Agent/portfoliio%20sanket%20V2/public/scenes/scene-5-production-portal.jpg)
-* **Output Video:** `public/scenes/scene-5-production-portal.mp4`
+* **Output Video:** `public/scenes/ `
 * **Duration:** 4–6 seconds | 16:9
 
 #### 📝 Veo Video Motion Prompt:
