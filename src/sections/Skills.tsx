@@ -80,11 +80,11 @@ export const Skills: React.FC = () => {
             return (
               <div
                 key={cat.title}
-                className="p-6 rounded-2xl bg-slate-900/45 border border-sky-500/20 hover:border-sky-400/50 transition-all flex flex-col justify-between shadow-2xl backdrop-blur-xl"
+                className="p-6 rounded-2xl bg-slate-950/20 hover:bg-slate-950/30 border border-sky-500/25 hover:border-sky-400/50 transition-all flex flex-col justify-between shadow-2xl backdrop-blur-[6px]"
               >
                 <div>
-                  <div className="flex items-center gap-3 pb-3 border-b border-slate-800/80 text-white font-semibold text-sm">
-                    <div className="w-8 h-8 rounded-lg bg-slate-950/60 flex items-center justify-center text-sky-400 border border-slate-700/60 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-700/40 text-white font-semibold text-sm">
+                    <div className="w-8 h-8 rounded-lg bg-slate-950/40 flex items-center justify-center text-sky-400 border border-slate-700/50 backdrop-blur-sm">
                       <IconComponent className="w-4 h-4" />
                     </div>
                     <span>{cat.title}</span>
@@ -94,7 +94,7 @@ export const Skills: React.FC = () => {
                     {cat.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-slate-950/50 text-slate-200 border border-slate-700/60 hover:text-sky-300 hover:border-sky-400/50 transition-colors shadow-sm backdrop-blur-sm"
+                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-slate-950/35 text-slate-100 border border-slate-700/50 hover:text-sky-300 hover:border-sky-400/50 transition-colors shadow-sm backdrop-blur-sm"
                       >
                         <TechIcon name={skill} className="w-3.5 h-3.5" />
                         <span>{skill}</span>
@@ -108,7 +108,7 @@ export const Skills: React.FC = () => {
         </div>
 
         {/* DEDICATED AWS EXPERIENCE SECTION WITH OFFICIAL AWS ICONS */}
-        <div className="mt-16 p-6 sm:p-10 rounded-2xl bg-slate-900/50 border border-sky-500/25 shadow-2xl space-y-8 backdrop-blur-xl">
+        <div className="mt-16 p-6 sm:p-10 rounded-2xl bg-slate-950/20 border border-sky-500/25 shadow-2xl space-y-8 backdrop-blur-[6px]">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
             <div>
               <div className="flex items-center gap-2 font-mono text-xs text-sky-400 font-semibold uppercase tracking-wider">

@@ -59,53 +59,90 @@ const SCENES: SceneConfig[] = [
 export const CinematicScrollJourney: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [videoBlobs, setVideoBlobs] = useState<(string | null)[]>([null, null, null, null, null]);
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-  const targetTimes = useRef<number[]>([0, 0, 0, 0, 0]);
-  const currentTimes = useRef<number[]>([0, 0, 0, 0, 0]);
-  const isSeeking = useRef<boolean[]>([false, false, false, false, false]);
+  const targetNormTimes = useRef<number[]>([0, 0, 0, 0, 0]);
+  const currentNormTimes = useRef<number[]>([0, 0, 0, 0, 0]);
   const rafId = useRef<number | null>(null);
   const reducedMotion = useReducedMotion();
 
-  // Initialize and prime all videos on mount
+  // Load all 5 videos as Blobs into memory for instant zero-latency RAM seeking
   useEffect(() => {
-    videoRefs.current.forEach((video) => {
-      if (video) {
-        video.muted = true;
-        video.playsInline = true;
-        video.currentTime = 0.01;
-        video.play().catch(() => {});
-      }
+    let active = true;
+
+    SCENES.forEach((scene, idx) => {
+      fetch(scene.videoSrc)
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.blob();
+        })
+        .then((blob) => {
+          if (!active) return;
+          const blobUrl = URL.createObjectURL(blob);
+          setVideoBlobs((prev) => {
+            const next = [...prev];
+            next[idx] = blobUrl;
+            return next;
+          });
+        })
+        .catch(() => {
+          // Fallback to static URL
+          if (!active) return;
+          setVideoBlobs((prev) => {
+            const next = [...prev];
+            next[idx] = scene.videoSrc;
+            return next;
+          });
+        });
     });
+
+    return () => {
+      active = false;
+      videoBlobs.forEach((url) => {
+        if (url && url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
   }, []);
 
-  // 60fps RAF Lerp Scrubbing Loop
+  // Coalesced RAF Lerp Scrubbing Loop (True lets-scroll engine architecture)
   const scrubLoop = useCallback(() => {
+    const isCoarse = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    const eps = isCoarse ? 0.02 : 0.008;
+
     videoRefs.current.forEach((video, idx) => {
-      if (video && video.duration && !isNaN(video.duration)) {
-        const target = targetTimes.current[idx];
-        const cur = currentTimes.current[idx];
+      if (video && video.duration && !isNaN(video.duration) && video.readyState >= 2) {
+        // Never queue a seek while the hardware decoder is busy seeking
+        if (video.seeking) return;
 
-        const nextTime = cur + (target - cur) * 0.25;
-        currentTimes.current[idx] = nextTime;
+        const target = targetNormTimes.current[idx];
+        const cur = currentNormTimes.current[idx];
 
-        if (Math.abs(video.currentTime - nextTime) > 0.03 && !isSeeking.current[idx]) {
-          isSeeking.current[idx] = true;
+        // Smooth liquid lerp
+        const nextCur = cur + (target - cur) * (reducedMotion ? 1 : 0.22);
+        currentNormTimes.current[idx] = nextCur;
+
+        const dur = video.duration || 1;
+        const targetSeconds = Math.max(0, Math.min(0.999, nextCur)) * dur;
+
+        if (Math.abs(video.currentTime - targetSeconds) > eps) {
           try {
-            if ('fastSeek' in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === 'function') {
-              (video as unknown as { fastSeek: (t: number) => void }).fastSeek(nextTime);
+            if ('fastSeek' in video && typeof (video as any).fastSeek === 'function') {
+              (video as any).fastSeek(targetSeconds);
             } else {
-              video.currentTime = nextTime;
+              video.currentTime = targetSeconds;
             }
           } catch {
-            video.currentTime = nextTime;
+            video.currentTime = targetSeconds;
           }
         }
       }
     });
 
     rafId.current = requestAnimationFrame(scrubLoop);
-  }, []);
+  }, [reducedMotion]);
 
   useEffect(() => {
     rafId.current = requestAnimationFrame(scrubLoop);
@@ -114,7 +151,7 @@ export const CinematicScrollJourney: React.FC = () => {
     };
   }, [scrubLoop]);
 
-  // Scroll listener that updates progress and video target times
+  // Scroll listener that calculates active normalized scene progress
   useEffect(() => {
     const handleScroll = () => {
       const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -123,16 +160,13 @@ export const CinematicScrollJourney: React.FC = () => {
         setScrollProgress(progress);
 
         SCENES.forEach((scene, idx) => {
-          const video = videoRefs.current[idx];
-          if (video && video.duration && !isNaN(video.duration)) {
-            if (progress >= scene.start && progress <= scene.end) {
-              const sceneProgress = (progress - scene.start) / (scene.end - scene.start);
-              targetTimes.current[idx] = Math.max(0, Math.min(video.duration, sceneProgress * video.duration));
-            } else if (progress < scene.start) {
-              targetTimes.current[idx] = 0;
-            } else {
-              targetTimes.current[idx] = video.duration;
-            }
+          if (progress >= scene.start && progress <= scene.end) {
+            const norm = (progress - scene.start) / (scene.end - scene.start);
+            targetNormTimes.current[idx] = Math.max(0, Math.min(1, norm));
+          } else if (progress < scene.start) {
+            targetNormTimes.current[idx] = 0;
+          } else {
+            targetNormTimes.current[idx] = 1;
           }
         });
       }
@@ -156,27 +190,24 @@ export const CinematicScrollJourney: React.FC = () => {
     };
   }, [reducedMotion]);
 
-  // Precise Crossfade Opacity (NEVER 0 at page start)
+  // Smooth Crossfade Opacity
   const getSceneOpacity = (idx: number) => {
     const scene = SCENES[idx];
     const { start, end } = scene;
-    const fadeZone = 0.05; // 5% crossfade margin
+    const fadeZone = 0.05;
 
-    // First scene is 100% visible at scroll = 0
     if (idx === 0) {
       if (scrollProgress <= start + 0.12) return 1;
       if (scrollProgress > end) return 0;
       return Math.max(0, (end - scrollProgress) / fadeZone);
     }
 
-    // Last scene stays visible until end
     if (idx === SCENES.length - 1) {
       if (scrollProgress >= end - 0.12) return 1;
       if (scrollProgress < start) return 0;
       return Math.min(1, (scrollProgress - start) / fadeZone);
     }
 
-    // Middle scenes
     if (scrollProgress < start - fadeZone || scrollProgress > end + fadeZone) return 0;
     if (scrollProgress >= start && scrollProgress <= end) return 1;
     if (scrollProgress < start) return (scrollProgress - (start - fadeZone)) / fadeZone;
@@ -184,12 +215,11 @@ export const CinematicScrollJourney: React.FC = () => {
   };
 
   // Parallax transform with 3D perspective tilt
-  const tiltX = reducedMotion ? 0 : -mouseOffset.y * 3;
-  const tiltY = reducedMotion ? 0 : mouseOffset.x * 3;
-  const panX = reducedMotion ? 0 : -mouseOffset.x * 8;
-  const panY = reducedMotion ? 0 : -mouseOffset.y * 8;
+  const tiltX = reducedMotion ? 0 : -mouseOffset.y * 3.5;
+  const tiltY = reducedMotion ? 0 : mouseOffset.x * 3.5;
+  const panX = reducedMotion ? 0 : -mouseOffset.x * 10;
+  const panY = reducedMotion ? 0 : -mouseOffset.y * 10;
 
-  // Active scene name for HUD
   const activeSceneName =
     SCENES.find((s) => scrollProgress >= s.start && scrollProgress <= s.end)?.name || SCENES[0].name;
 
@@ -209,9 +239,10 @@ export const CinematicScrollJourney: React.FC = () => {
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* Layered Cinematic Background Scenes */}
+        {/* Layered Background Scenes */}
         {SCENES.map((scene, idx) => {
           const opacity = getSceneOpacity(idx);
+          const currentSrc = videoBlobs[idx] || scene.videoSrc;
 
           return (
             <div
@@ -222,42 +253,39 @@ export const CinematicScrollJourney: React.FC = () => {
                 zIndex: idx,
               }}
             >
-              {/* High-FPS Scrubbed Video Element */}
+              {/* RAM-Buffered Fast-Scrubbed Video Element */}
               <video
                 ref={(el) => {
                   videoRefs.current[idx] = el;
                 }}
-                src={scene.videoSrc}
+                src={currentSrc}
                 poster={scene.imageSrc}
                 muted
                 playsInline
                 preload="auto"
-                onSeeked={() => {
-                  isSeeking.current[idx] = false;
-                }}
-                className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.08]"
+                className="w-full h-full object-cover object-center filter brightness-[0.94] contrast-[1.06]"
                 onError={(e) => {
                   (e.currentTarget as HTMLVideoElement).style.display = 'none';
                 }}
               />
 
-              {/* Poster Backup Layer (always under the video) */}
+              {/* Poster Backup Layer */}
               <img
                 src={scene.imageSrc}
                 alt={scene.name}
-                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.08] -z-10"
+                className="absolute inset-0 w-full h-full object-cover object-center filter brightness-[0.94] contrast-[1.06] -z-10"
               />
 
-              {/* Light Vignette so Text is 100% Legible while Anime Art is Bright */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-slate-950/40" />
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/50 via-transparent to-slate-950/50" />
+              {/* Soft Ambient Radial Vignette */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-slate-950/30" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/40 via-transparent to-slate-950/40" />
             </div>
           );
         })}
       </div>
 
       {/* Anime DevOps Story Chapter HUD in Bottom Left */}
-      <div className="absolute bottom-4 left-6 hidden lg:flex items-center gap-3 bg-slate-900/80 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-slate-700/80 text-[11px] font-mono text-slate-300 z-10 shadow-xl">
+      <div className="absolute bottom-4 left-6 hidden lg:flex items-center gap-3 bg-slate-900/70 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-sky-500/20 text-[11px] font-mono text-slate-300 z-10 shadow-xl">
         <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         <span className="text-slate-400">Scene:</span>
         <span className="text-sky-400 font-semibold">{activeSceneName}</span>
