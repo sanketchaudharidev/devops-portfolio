@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { ScrollTopologyGraph } from './ScrollTopologyGraph';
+import { AwsCloudHero3D } from './AwsCloudHero3D';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 export const GlobalScene3D: React.FC = () => {
@@ -21,15 +21,15 @@ export const GlobalScene3D: React.FC = () => {
   if (!webGLSupported) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-75">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-85">
       <Suspense fallback={null}>
         <Canvas
-          camera={{ position: [0, 0, 7.2], fov: 45 }}
+          camera={{ position: [0, 0, 7.8], fov: 45 }}
           gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
           dpr={[1, 1.5]}
           className="w-full h-full"
         >
-          <ScrollTopologyGraph reducedMotion={reducedMotion} />
+          <AwsCloudHero3D reducedMotion={reducedMotion} />
         </Canvas>
       </Suspense>
     </div>
