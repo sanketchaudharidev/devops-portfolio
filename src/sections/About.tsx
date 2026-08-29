@@ -35,12 +35,12 @@ export const About: React.FC = () => {
                 Proven Multi-Domain Track Record:
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                <div className="p-4 rounded-xl bg-surface-200/90 border border-slate-700/80 space-y-2 shadow-lg">
+                <div className="p-4 rounded-xl bg-slate-950/45 border border-sky-500/25 space-y-2 shadow-lg backdrop-blur-md hover:border-sky-400/50 transition-all">
                   <div className="flex items-center gap-2 text-sky-400 font-semibold text-xs">
                     <Server className="w-4 h-4" />
                     <span>AdTech / MarTech</span>
                   </div>
-                  <p className="text-xs text-slate-400">Microservices Pre-Prod management at blkbox.ai</p>
+                  <p className="text-xs text-slate-300">Microservices Pre-Prod management at blkbox.ai</p>
                   <div className="flex items-center gap-1.5 pt-1">
                     <TechIcon name="kubernetes" className="w-3.5 h-3.5" />
                     <TechIcon name="docker" className="w-3.5 h-3.5" />
@@ -48,12 +48,12 @@ export const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-surface-200/90 border border-slate-700/80 space-y-2 shadow-lg">
+                <div className="p-4 rounded-xl bg-slate-950/45 border border-emerald-500/25 space-y-2 shadow-lg backdrop-blur-md hover:border-emerald-400/50 transition-all">
                   <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs">
                     <Shield className="w-4 h-4" />
                     <span>Insurance Platform</span>
                   </div>
-                  <p className="text-xs text-slate-400">Enterprise PREMIA 9 at Tieto Software Technologies</p>
+                  <p className="text-xs text-slate-300">Enterprise PREMIA 9 at Tieto Software Technologies</p>
                   <div className="flex items-center gap-1.5 pt-1">
                     <TechIcon name="aws" className="w-3.5 h-3.5" />
                     <TechIcon name="jenkins" className="w-3.5 h-3.5" />
@@ -61,12 +61,12 @@ export const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-surface-200/90 border border-slate-700/80 space-y-2 shadow-lg">
-                  <div className="flex items-center gap-2 text-amber-400 font-semibold text-xs">
+                <div className="p-4 rounded-xl bg-slate-950/45 border border-indigo-500/25 space-y-2 shadow-lg backdrop-blur-md hover:border-indigo-400/50 transition-all">
+                  <div className="flex items-center gap-2 text-indigo-400 font-semibold text-xs">
                     <Terminal className="w-4 h-4" />
                     <span>AI / SaaS Platform</span>
                   </div>
-                  <p className="text-xs text-slate-400">Sole DevOps Engineer for MERN & GenAI at AIQOD</p>
+                  <p className="text-xs text-slate-300">Sole DevOps Engineer for MERN & GenAI at AIQOD</p>
                   <div className="flex items-center gap-1.5 pt-1">
                     <TechIcon name="python" className="w-3.5 h-3.5" />
                     <TechIcon name="mongodb" className="w-3.5 h-3.5" />
@@ -79,14 +79,14 @@ export const About: React.FC = () => {
 
           {/* Quick Verified Metadata Sidebar */}
           <div className="lg:col-span-4 space-y-4">
-            <div className="p-6 rounded-2xl bg-surface-300 border border-slate-700/80 shadow-2xl space-y-4 backdrop-blur-md">
-              <h3 className="font-mono text-xs text-brand-primary uppercase tracking-wider pb-3 border-b border-slate-800 flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-brand-primary" />
+            <div className="p-6 rounded-2xl bg-slate-900/50 border border-sky-500/25 shadow-2xl space-y-4 backdrop-blur-xl">
+              <h3 className="font-mono text-xs text-sky-400 uppercase tracking-wider pb-3 border-b border-slate-800/80 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-sky-400" />
                 Verified Profile Metadata
               </h3>
 
               <div className="space-y-3 font-mono text-xs">
-                <div className="flex items-center justify-between py-1.5 border-b border-slate-800">
+                <div className="flex items-center justify-between py-1.5 border-b border-slate-800/80">
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-sky-400" />
                     Experience
@@ -94,7 +94,7 @@ export const About: React.FC = () => {
                   <span className="text-slate-200 font-semibold">3+ Years</span>
                 </div>
 
-                <div className="flex items-center justify-between py-1.5 border-b border-slate-800">
+                <div className="flex items-center justify-between py-1.5 border-b border-slate-800/80">
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
                     Primary Role
@@ -102,7 +102,7 @@ export const About: React.FC = () => {
                   <span className="text-slate-200 font-semibold">DevOps Engineer</span>
                 </div>
 
-                <div className="flex items-center justify-between py-1.5 border-b border-slate-800">
+                <div className="flex items-center justify-between py-1.5 border-b border-slate-800/80">
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-rose-400" />
                     Location
@@ -110,7 +110,7 @@ export const About: React.FC = () => {
                   <span className="text-slate-200 font-semibold">Pune, India</span>
                 </div>
 
-                <div className="flex items-center justify-between py-1.5 border-b border-slate-800">
+                <div className="flex items-center justify-between py-1.5 border-b border-slate-800/80">
                   <span className="text-slate-400">Education</span>
                   <span className="text-slate-200 font-semibold">B.E. Computer Engg</span>
                 </div>
@@ -123,8 +123,8 @@ export const About: React.FC = () => {
             </div>
 
             {/* Core Tenet */}
-            <div className="p-4 rounded-xl bg-surface-200/60 border border-slate-800 text-xs text-slate-300 font-mono flex items-start gap-2.5 shadow">
-              <span className="text-brand-primary text-base font-bold">“</span>
+            <div className="p-4 rounded-xl bg-slate-950/45 border border-slate-700/60 text-xs text-slate-300 font-mono flex items-start gap-2.5 shadow backdrop-blur-sm">
+              <span className="text-sky-400 text-base font-bold">“</span>
               <p>
                 Engineering discipline in release management: every build is validated, every environment is consistent, and observability is continuous.
               </p>

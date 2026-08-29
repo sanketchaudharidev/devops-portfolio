@@ -61,10 +61,10 @@ export const Skills: React.FC = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all ${
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all backdrop-blur-md cursor-pointer ${
                 selectedCategory === cat
-                  ? 'bg-brand-primary text-slate-950 font-bold shadow-md shadow-sky-950/40'
-                  : 'bg-surface-200/90 text-slate-300 hover:text-white hover:bg-surface-100 border border-slate-700/80'
+                  ? 'bg-sky-400 text-slate-950 font-bold shadow-md shadow-sky-950/40'
+                  : 'bg-slate-900/40 text-slate-300 hover:text-white hover:bg-slate-800/50 border border-slate-700/50'
               }`}
             >
               {cat}
@@ -80,11 +80,11 @@ export const Skills: React.FC = () => {
             return (
               <div
                 key={cat.title}
-                className="p-6 rounded-2xl bg-surface-300/90 border border-slate-700/80 hover:border-slate-600 transition-all flex flex-col justify-between shadow-xl backdrop-blur-md"
+                className="p-6 rounded-2xl bg-slate-900/45 border border-sky-500/20 hover:border-sky-400/50 transition-all flex flex-col justify-between shadow-2xl backdrop-blur-xl"
               >
                 <div>
-                  <div className="flex items-center gap-3 pb-3 border-b border-slate-800 text-white font-semibold text-sm">
-                    <div className="w-8 h-8 rounded-lg bg-surface-100 flex items-center justify-center text-brand-primary border border-slate-700">
+                  <div className="flex items-center gap-3 pb-3 border-b border-slate-800/80 text-white font-semibold text-sm">
+                    <div className="w-8 h-8 rounded-lg bg-slate-950/60 flex items-center justify-center text-sky-400 border border-slate-700/60 backdrop-blur-sm">
                       <IconComponent className="w-4 h-4" />
                     </div>
                     <span>{cat.title}</span>
@@ -94,7 +94,7 @@ export const Skills: React.FC = () => {
                     {cat.skills.map((skill) => (
                       <span
                         key={skill}
-                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-surface-200 text-slate-200 border border-slate-700/70 hover:text-brand-primary hover:border-brand-primary/40 transition-colors shadow-sm"
+                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-slate-950/50 text-slate-200 border border-slate-700/60 hover:text-sky-300 hover:border-sky-400/50 transition-colors shadow-sm backdrop-blur-sm"
                       >
                         <TechIcon name={skill} className="w-3.5 h-3.5" />
                         <span>{skill}</span>
@@ -108,8 +108,8 @@ export const Skills: React.FC = () => {
         </div>
 
         {/* DEDICATED AWS EXPERIENCE SECTION WITH OFFICIAL AWS ICONS */}
-        <div className="mt-16 p-6 sm:p-10 rounded-2xl bg-surface-300 border border-slate-700/90 shadow-2xl space-y-8 backdrop-blur-md">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div className="mt-16 p-6 sm:p-10 rounded-2xl bg-slate-900/50 border border-sky-500/25 shadow-2xl space-y-8 backdrop-blur-xl">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
             <div>
               <div className="flex items-center gap-2 font-mono text-xs text-sky-400 font-semibold uppercase tracking-wider">
                 <TechIcon name="aws" className="w-4 h-4" />
@@ -119,14 +119,17 @@ export const Skills: React.FC = () => {
                 AWS Experience Map
               </h3>
             </div>
-            <span className="font-mono text-xs text-slate-400 bg-surface-200 px-3 py-1 rounded border border-slate-700">
-              Verified Production vs Exploratory Scope
-            </span>
+            <div className="flex items-center gap-3 font-mono text-xs text-slate-300">
+              <span className="flex items-center gap-1.5 px-3 py-1 rounded bg-sky-500/10 text-sky-300 border border-sky-500/30">
+                <CheckCircle2 className="w-3.5 h-3.5 text-sky-400" />
+                Production Environments
+              </span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Hands-on AWS Experience (14 Services) */}
-            <div className="space-y-4 bg-surface-200/80 p-6 rounded-xl border border-slate-700/90">
+            <div className="space-y-4 bg-slate-950/40 p-6 rounded-xl border border-slate-700/60 backdrop-blur-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase">
                   <CheckCircle2 className="w-4 h-4" />

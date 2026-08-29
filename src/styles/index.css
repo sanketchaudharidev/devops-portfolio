@@ -5,11 +5,11 @@
 @layer base {
   :root {
     --bg-dark: #090d16;
-    --surface-1: #0d1322;
-    --surface-2: #111827;
-    --surface-3: #161f30;
-    --border-color: rgba(255, 255, 255, 0.08);
-    --border-highlight: rgba(56, 189, 248, 0.25);
+    --surface-1: rgba(13, 19, 34, 0.55);
+    --surface-2: rgba(15, 23, 42, 0.45);
+    --surface-3: rgba(22, 31, 48, 0.50);
+    --border-color: rgba(255, 255, 255, 0.10);
+    --border-highlight: rgba(56, 189, 248, 0.35);
     --accent-sky: #38bdf8;
     --accent-emerald: #10b981;
     --accent-indigo: #818cf8;
@@ -33,44 +33,48 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #090d16;
+    background: rgba(9, 13, 22, 0.8);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1e293b;
+    background: rgba(56, 189, 248, 0.3);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #334155;
+    background: rgba(56, 189, 248, 0.6);
   }
 }
 
-/* Background grid pattern */
-.bg-grid-pattern {
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 32px 32px;
+/* Glassmorphic Panel Styles */
+.glass-panel {
+  background: rgba(13, 19, 34, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.18);
 }
 
-.bg-radial-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08) 0%, rgba(9, 13, 22, 0) 70%);
+.glass-panel-subtle {
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .card-gradient {
-  background: linear-gradient(135deg, rgba(17, 24, 39, 0.7) 0%, rgba(13, 19, 34, 0.9) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.45) 0%, rgba(13, 19, 34, 0.55) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .card-border {
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   transition: all 0.25s ease;
 }
 
 .card-border:hover {
-  border-color: rgba(56, 189, 248, 0.3);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 15px -3px rgba(56, 189, 248, 0.15);
 }
 
 /* Code & monospace pill styles */
@@ -88,6 +92,5 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }

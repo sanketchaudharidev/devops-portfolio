@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, ChevronDown, ChevronUp, Check, Layers } from 'lucide-react';
+import { Calendar, MapPin, Check, ChevronDown, Layers } from 'lucide-react';
 import { profileData } from '../data/profile';
 import { SectionHeading } from '../components/common/SectionHeading';
 import { Container } from '../components/layout/Container';
@@ -30,21 +30,21 @@ export const Experience: React.FC = () => {
             return (
               <div key={exp.id} className="relative pl-6 sm:pl-10">
                 {/* Timeline node dot */}
-                <div className="absolute -left-[11px] top-1.5 w-5 h-5 rounded-full bg-surface-400 border-2 border-brand-primary flex items-center justify-center shadow-lg shadow-sky-950/50">
-                  <div className="w-2 h-2 rounded-full bg-brand-primary" />
+                <div className="absolute -left-[11px] top-1.5 w-5 h-5 rounded-full bg-slate-900 border-2 border-sky-400 flex items-center justify-center shadow-lg shadow-sky-950/50">
+                  <div className="w-2 h-2 rounded-full bg-sky-400" />
                 </div>
 
                 {/* Experience Card */}
-                <div className="rounded-2xl bg-surface-300/90 border border-slate-700/80 hover:border-brand-primary/40 transition-all p-6 sm:p-8 shadow-xl backdrop-blur-md">
+                <div className="rounded-2xl bg-slate-900/45 border border-sky-500/20 hover:border-sky-400/50 transition-all p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
                   
                   {/* Top Row: Company & Dates */}
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
                     <div>
                       <div className="flex flex-wrap items-center gap-2.5">
                         <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                           {exp.company}
                         </h3>
-                        <span className="font-mono text-xs px-2.5 py-1 rounded bg-brand-primary/10 text-brand-primary border border-brand-primary/30 font-semibold">
+                        <span className="font-mono text-xs px-2.5 py-1 rounded bg-sky-500/10 text-sky-400 border border-sky-500/30 font-semibold">
                           {exp.role}
                         </span>
                       </div>
@@ -58,11 +58,11 @@ export const Experience: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3 font-mono text-xs text-slate-400">
-                      <span className="flex items-center gap-1.5 bg-surface-200 px-2.5 py-1 rounded border border-slate-800">
-                        <Calendar className="w-3.5 h-3.5 text-brand-primary" />
+                      <span className="flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded border border-slate-800 backdrop-blur-sm">
+                        <Calendar className="w-3.5 h-3.5 text-sky-400" />
                         {exp.dates}
                       </span>
-                      <span className="flex items-center gap-1.5 bg-surface-200 px-2.5 py-1 rounded border border-slate-800">
+                      <span className="flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded border border-slate-800 backdrop-blur-sm">
                         <MapPin className="w-3.5 h-3.5 text-slate-400" />
                         {exp.location}
                       </span>
@@ -82,7 +82,7 @@ export const Experience: React.FC = () => {
                     {exp.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-surface-200/90 text-slate-200 border border-slate-700/80 shadow-sm"
+                        className="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-1 rounded-md bg-slate-950/50 text-slate-200 border border-slate-700/60 shadow-sm backdrop-blur-sm"
                       >
                         <TechIcon name={tech} className="w-3.5 h-3.5" />
                         <span>{tech}</span>
@@ -92,7 +92,7 @@ export const Experience: React.FC = () => {
 
                   {/* Responsibilities List */}
                   <div className="mt-5">
-                    <ul className="space-y-2.5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <ul className="space-y-2.5 text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
                       {(isExpanded ? exp.responsibilities : exp.responsibilities.slice(0, 3)).map(
                         (resp, rIdx) => (
                           <li key={rIdx} className="flex items-start gap-2.5">
@@ -102,27 +102,20 @@ export const Experience: React.FC = () => {
                         )
                       )}
                     </ul>
-
-                    {/* Expand/Collapse Button */}
-                    {exp.responsibilities.length > 3 && (
-                      <button
-                        onClick={() => toggleExpand(exp.id)}
-                        className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs text-brand-primary hover:text-sky-300 transition-colors focus:outline-none font-semibold"
-                      >
-                        <span>
-                          {isExpanded
-                            ? 'Show Fewer Responsibilities'
-                            : `View All ${exp.responsibilities.length} Responsibilities`}
-                        </span>
-                        {isExpanded ? (
-                          <ChevronUp className="w-4 h-4" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4" />
-                        )}
-                      </button>
-                    )}
                   </div>
 
+                  {/* Expand / Collapse Button */}
+                  {exp.responsibilities.length > 3 && (
+                    <div className="mt-5 pt-3 border-t border-slate-800/80">
+                      <button
+                        onClick={() => toggleExpand(exp.id)}
+                        className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+                      >
+                        <span>{isExpanded ? 'Show Less Details' : `+ Show ${exp.responsibilities.length - 3} More Key Responsibilities`}</span>
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             );
